@@ -1,5 +1,7 @@
 # sonic-dependency-tree
 
+[![Build Status](https://travis-ci.org/SupersonicAds/sonic-dependency-tree.svg?branch=master)](https://travis-ci.org/SupersonicAds/sonic-dependency-tree)
+
 SBT plugin for retrieving Scala modules and libraries dependencies and outputs it as JSON. As an identifier for current dependencies, we use Git commit.
 In addition, there's an option to upload the current commit project's dependencies to Amazon S3.
 
