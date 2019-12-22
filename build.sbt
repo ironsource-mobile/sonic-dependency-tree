@@ -11,4 +11,3 @@ libraryDependencies ++= Seq(
   "ai.x" %% "play-json-extensions" % "0.40.2",
   "com.amazonaws" % "aws-java-sdk-s3" % "1.11.688"
 )
-
