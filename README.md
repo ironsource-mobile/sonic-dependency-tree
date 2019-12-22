@@ -1,12 +1,12 @@
 # sonic-dependency-tree
 
 SBT plugin for retrieving Scala modules and libraries dependencies and outputs it as JSON. As an identifier for current dependencies, we use Git commit.
-In addition, there's an option to upload current commit project's dependencies to Amazon S3.
+In addition, there's an option to upload the current commit project's dependencies to Amazon S3.
 
 ## Motivation
-In our project, which is mono-repo, we have a lot of services and libraries, and it became hard to follow the module/library dependency graph. There are SBT plugins that can answer this question, but they usually contain large amount of settings and tasks that are not relevant to our needs.
-We wanted to have lightweight sbt command to understand our project's modules dependencies.
-With the help of Github API commit diff, we can use this information in order to determine which services were affected by the code change in commit and deploy only these services.
+In our project, which is mono-repo, we have a lot of services and libraries, and it became hard to follow the module/library dependency graph. There are SBT plugins that can answer this question, but they usually contain a large number of settings and tasks that are not relevant to our needs.
+We wanted to have a lightweight sbt command to understand our project's module dependencies.
+With the help of Github API commit diff, we can use this information in order to determine which services were affected by the code change in a commit and deploy only these services.
 It helps to keep track of module dependencies and library version used in each module.
 
 ## Installation
@@ -52,7 +52,7 @@ lazy val root = (project in file("."))
 ## S3 configuration
 You can upload the dependency tree of the project to AWS S3 using this command `sbt sonicDependenciesUploadToS3`
 
-Since the upload task is for the whole project, settings for it should be set on root project.
+Since the upload task is for the whole project, settings for it should be set on the root project.
 For example:
 ``` scala
 lazy val root = (project in file("."))
@@ -67,8 +67,7 @@ This will upload the file to `S3://dependencies-bucket/my-folder/dependencies.js
 
 ## S3 credentials config
 
-- WARNING: preferred method, is to use `sonicDependenciesS3Credentials` as default and use this setting with hardcoded credentials for testing purposes ONLY!
+- WARNING: The preferred method, is to use `sonicDependenciesS3Credentials` as default and use this setting with hardcoded credentials for testing purposes ONLY!
 
 AWS S3 client library used is `com.amazonaws.aws-java-sdk-s3`
-In case `sonicDependenciesS3Credentials` is not set, S3 client will use  `DefaultAWSCredentialsProviderChain`, which is preferred method and do not require to store credentials in `build.sbt` project definition, also it is more secure.
-
+In case `sonicDependenciesS3Credentials` is not set, S3 client will use  `DefaultAWSCredentialsProviderChain`, which is the preferred method and do not require to store credentials in `build.sbt` project definition, also it is more secure.
