@@ -1,0 +1,22 @@
+sudo: false
+language: scala
+scala:
+  - 2.12.2
+jdk:
+  - openjdk8
+
+stages:
+  - name: build
+  - name: publish
+    if: ((branch = master) AND (type != pull_request)) OR (tag IS present)
+
+jobs:
+  include:
+    - stage: build
+      script: sbt ++$TRAVIS_SCALA_VERSION test
+
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt
+    - $HOME/.coursier
