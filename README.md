@@ -66,9 +66,8 @@ lazy val root = (project in file("."))
 This will upload the file to `S3://dependencies-bucket/my-folder/dependencies.json`
 
 ## S3 credentials config
-```diff
-- WARNING preferred method is to use `sonicDependenciesS3Credentials` defaults and use this setting for testing purposes ONLY!
-```
+
+- WARNING: preferred method, is to use `sonicDependenciesS3Credentials` as default and use this setting with hardcoded credentials for testing purposes ONLY!
 
 AWS S3 client library used is `com.amazonaws.aws-java-sdk-s3`
 In case `sonicDependenciesS3Credentials` is not set, S3 client will use  `DefaultAWSCredentialsProviderChain`, which is preferred method and do not require to store credentials in `build.sbt` project definition, also it is more secure.
