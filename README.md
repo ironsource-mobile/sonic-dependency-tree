@@ -33,7 +33,7 @@ lazy val root = (project in file("."))
 - `sonicDependenciesS3Bucket` : `String` 
     - The S3 bucket to upload the dependency tree
     - default: ""
-- `sonicDependenciesS3Credentials` : Seq[Credentials]
+- `sonicDependenciesS3Credentials` : `Seq[Credentials]`
     - The S3 credentials to use to upload to S3 with, if empty defaults taken from the environment or IAM will be used
     - default: Empty (see below)
 - `sonicDependenciesUploadFilename` : `String` 
