@@ -60,7 +60,7 @@ object SonicDependencyTreePlugin extends AutoPlugin {
     val client = getS3Client(sonicDependenciesS3Credentials.value, "")
     val bucketName = s"$s3BucketValue/$s3BasePathValue"
     log.info(s"Uploading dependency tree to: s3://$bucketName/$uploadFilenameValue")
-    client.putObject(bucketName, uploadFilenameValue, treeJson)
+    val _ = client.putObject(bucketName, uploadFilenameValue, treeJson)
   }
 
   private def printTreeWithCommitTask = Def.task {
