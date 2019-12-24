@@ -13,8 +13,7 @@ scalacOptions ++= List(
   "-Ywarn-value-discard",
   "-Xfuture",
   "-Xlint",
-  "-Ypartial-unification",
-  "-P:splain:color:false")
+  "-Ypartial-unification")
 
 buildInfoKeys := List[BuildInfoKey](
   name,
