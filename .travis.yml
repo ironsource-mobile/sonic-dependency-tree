@@ -15,7 +15,7 @@ jobs:
     - stage: build
       script: sbt ++$TRAVIS_SCALA_VERSION test
     - stage: publish
-        script: sbt ++$TRAVIS_SCALA_VERSION releaseEarly;
+      script: sbt ++$TRAVIS_SCALA_VERSION releaseEarly;
 
 before_install:
   - if [ $TRAVIS_PULL_REQUEST = 'false' ]; then
