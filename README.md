@@ -14,9 +14,15 @@ It helps to keep track of module dependencies and library version used in each m
 ## Installation
 Add the plugin as SBT dependency to your `project/plugins.sbt`
 
-```addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % x)```
+```
+resolvers += Resolver.bintrayRepo("ironsonic", "sbt-plugins")
 
-On your root project enable plugin
+addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % "0.0.1")
+```
+
+Since it is an Auto Plugin, no need to explicitly enable it on the root project.
+
+If you still wish to do so, you can do it like this:
 ``` scala
 lazy val root = (project in file("."))
   .enablePlugins(SonicDependencyTreePlugin)

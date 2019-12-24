@@ -8,7 +8,7 @@ jdk:
 stages:
   - name: build
   - name: publish
-    if: ((branch = master) AND (type != pull_request)) OR (tag IS present)
+    if: tag IS present
 
 jobs:
   include:
