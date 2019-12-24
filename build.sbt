@@ -25,6 +25,8 @@ buildInfoKeys := List[BuildInfoKey](
 
 buildInfoPackage := organization.value
 
+makePomConfiguration := makePomConfiguration.value.withConfigurations(Configurations.defaultMavenConfigurations)
+
 resolvers += Resolver.jcenterRepo
 
 sbtPlugin := true
