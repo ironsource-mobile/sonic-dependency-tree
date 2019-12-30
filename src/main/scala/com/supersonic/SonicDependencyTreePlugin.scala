@@ -4,7 +4,7 @@ import com.amazonaws.{ClientConfiguration, Protocol}
 import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials, DefaultAWSCredentialsProviderChain}
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import play.api.libs.json.{Json, Writes}
-import sbt._
+import sbt.{Def, _}
 import scala.sys.process.Process
 import scala.util.{Failure, Success, Try}
 
@@ -27,11 +27,13 @@ object SonicDependencyTreePlugin extends AutoPlugin {
 
   override def trigger = allRequirements
 
-  override lazy val buildSettings = Seq(
-    sonicDependenciesExcludeScalaLibrary in Global := false,
+  override def globalSettings: Seq[Def.Setting[_]] = baseSettings
+
+  private lazy val baseSettings = Seq(
+    sonicDependenciesExcludeScalaLibrary := false,
     sonicDependenciesGitCommit := println(commitHash),
-    sonicDependenciesS3BasePath in Global := "",
-    sonicDependenciesS3Bucket in Global := "",
+    sonicDependenciesS3BasePath := "",
+    sonicDependenciesS3Bucket := "",
     sonicDependenciesS3Credentials := Seq.empty,
     sonicDependenciesUploadFilename := s"$commitHash.json",
     sonicDependencies := printTreeTask.value,
@@ -41,15 +43,15 @@ object SonicDependencyTreePlugin extends AutoPlugin {
 
   private def uploadDependenciesTask = Def.task {
 
-    val s3BasePathValue = sonicDependenciesS3BasePath.value
     val s3BucketValue = sonicDependenciesS3Bucket.value
+    val s3BasePathValue = sonicDependenciesS3BasePath.value
 
     val log = Keys.streams.value.log
 
-    if (Option(s3BucketValue).isEmpty) {
+    if (s3BucketValue == null || s3BucketValue.isEmpty) {
       throw new MessageOnlyException("sonicDependenciesS3Bucket is not set")
     }
-    if (Option(s3BasePathValue).isEmpty) {
+    if (s3BasePathValue == null || s3BasePathValue.isEmpty) {
       throw new MessageOnlyException("sonicDependenciesS3BasePath is not set")
     }
 

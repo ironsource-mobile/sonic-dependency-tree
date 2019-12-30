@@ -17,10 +17,10 @@ Add the plugin as SBT dependency to your `project/plugins.sbt`
 ```
 resolvers += Resolver.bintrayRepo("ironsonic", "sbt-plugins")
 
-addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % "0.0.1")
+addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % "0.0.2")
 ```
 
-Since it is an Auto Plugin, no need to explicitly enable it on the root project.
+Since it is an Auto Plugin, no need to explicitly enable it.
 
 If you still wish to do so, you can do it like this:
 ``` scala
@@ -28,6 +28,16 @@ lazy val root = (project in file("."))
   .enablePlugins(SonicDependencyTreePlugin)
 ```
 
+## Important Note
+All Settings and Task are defined as `Global` and should be defined somewhere in `build.sbt` but not on individual projects.
+
+For example:
+```scala
+sonicDependenciesS3BasePath in Global := "my-folder"
+sonicDependenciesS3Bucket in Global := "dependencies-bucket"
+sonicDependenciesUploadFilename in Global := "dependencies.json"
+```
+ 
 ## Settings
 
 - `sonicDependenciesExcludeScalaLibrary` : `Boolean`
@@ -60,16 +70,12 @@ lazy val root = (project in file("."))
 ## S3 configuration
 You can upload the dependency tree of the project to AWS S3 using this command `sbt sonicDependenciesUploadToS3`
 
-Since the upload task is for the whole project, settings for it should be set on the root project.
+Reminder: Because the upload task is Global, the settings should be defined using `in Global` scope.
 For example:
 ``` scala
-lazy val root = (project in file("."))
-  .enablePlugins(SonicDependencyTreePlugin).
-  .settings(
-    sonicDependenciesS3BasePath := "my-folder",
-    sonicDependenciesS3Bucket := "dependencies-bucket",
-    sonicDependenciesUploadFilename := "dependencies.json"
-  )
+sonicDependenciesS3BasePath in Global := "my-folder",
+sonicDependenciesS3Bucket in Global := "dependencies-bucket",
+sonicDependenciesUploadFilename in Global := "dependencies.json"
 ```
 This will upload the file to `S3://dependencies-bucket/my-folder/dependencies.json`
 
