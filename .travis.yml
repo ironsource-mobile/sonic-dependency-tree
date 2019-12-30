@@ -13,7 +13,7 @@ stages:
 jobs:
   include:
     - stage: build
-      script: sbt ++$TRAVIS_SCALA_VERSION test
+      script: sbt ++$TRAVIS_SCALA_VERSION scripted
     - stage: publish
       script: sbt ++$TRAVIS_SCALA_VERSION releaseEarly;
 
