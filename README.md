@@ -1,6 +1,7 @@
 # sonic-dependency-tree
 
-[![Build Status](https://travis-ci.org/SupersonicAds/sonic-dependency-tree.svg?branch=master)](https://travis-ci.org/SupersonicAds/sonic-dependency-tree)
+[![Build Status](https://github.com/SupersonicAds/sonic-dependency-tree/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SupersonicAds/sonic-dependency-tree/actions?query=branch%3Amaster)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.supersonic/sonic-dependency-tree_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.supersonic/sonic-dependency-tree_2.12)
 
 SBT plugin for retrieving Scala modules and libraries dependencies and outputs it as JSON. As an identifier for current dependencies, we use Git commit.
 In addition, there's an option to upload the current commit project's dependencies to Amazon S3.
@@ -15,8 +16,6 @@ It helps to keep track of module dependencies and library version used in each m
 Add the plugin as SBT dependency to your `project/plugins.sbt`
 
 ```
-resolvers += Resolver.bintrayRepo("ironsonic", "sbt-plugins")
-
 addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % "0.0.2")
 ```
 
