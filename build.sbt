@@ -1,5 +1,4 @@
 enablePlugins(ScriptedPlugin)
-enablePlugins(BuildInfoPlugin)
 
 name := "sonic-dependency-tree"
 scalacOptions ++= List(
@@ -15,16 +14,6 @@ scalacOptions ++= List(
   "-Ypartial-unification")
 
 sonatypeCredentialHost := Sonatype.sonatype01
-
-buildInfoKeys := List[BuildInfoKey](
-  name,
-  version,
-  scalaVersion,
-  sbtVersion,
-  "gitCommit" -> git.gitHeadCommit.value.getOrElse(""),
-  "gitDescribedVersion" -> git.gitDescribedVersion.value.getOrElse(""))
-
-buildInfoPackage := organization.value
 
 makePomConfiguration := makePomConfiguration.value.withConfigurations(Configurations.defaultMavenConfigurations)
 
