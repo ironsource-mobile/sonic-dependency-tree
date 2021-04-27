@@ -1,7 +1,6 @@
 enablePlugins(ScriptedPlugin)
 enablePlugins(BuildInfoPlugin)
 
-organization := "com.supersonic"
 name := "sonic-dependency-tree"
 scalacOptions ++= List(
   "-encoding", "UTF-8",
@@ -14,6 +13,8 @@ scalacOptions ++= List(
   "-Xfuture",
   "-Xlint",
   "-Ypartial-unification")
+
+sonatypeCredentialHost := Sonatype.sonatype01
 
 buildInfoKeys := List[BuildInfoKey](
   name,
@@ -34,15 +35,23 @@ scriptedLaunchOpts += ("-Dplugin.version=" + version.value)
 scriptedBufferLog := false
 
 inThisBuild(List(
+  organization := "com.supersonic",
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   homepage := Some(url("https://github.com/SupersonicAds/sonic-dependency-tree")),
   developers := List(Developer("SupersonicAds", "SupersonicAds", "SupersonicAds", url("https://github.com/SupersonicAds"))),
   scmInfo := Some(ScmInfo(url("https://github.com/SupersonicAds/sonic-dependency-tree"), "scm:git:git@github.com:SupersonicAds/sonic-dependency-tree.git")),
 
-  pgpPublicRing := file("./travis/local.pubring.asc"),
-  pgpSecretRing := file("./travis/local.secring.asc"),
-  releaseEarlyEnableSyncToMaven := false,
-  releaseEarlyWith := BintrayPublisher))
+  githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v"))),
+  githubWorkflowTargetTags ++= Seq("v*"),
+  githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("test", "scripted"))),
+  githubWorkflowPublish := Seq(
+    WorkflowStep.Sbt(
+      List("ci-release"),
+      env = Map(
+        "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+        "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+        "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}")))))
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-json" % "2.8.0",
