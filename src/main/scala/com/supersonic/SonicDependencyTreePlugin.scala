@@ -9,6 +9,7 @@ import scala.sys.process.Process
 import scala.util.{Failure, Success, Try}
 
 object SonicDependencyTreePlugin extends AutoPlugin {
+
   object autoImport {
     lazy val sonicDependenciesGitCommit = taskKey[Unit]("Prints the current git HEAD SHA-1 commit hash")
 
@@ -21,6 +22,7 @@ object SonicDependencyTreePlugin extends AutoPlugin {
     lazy val sonicDependenciesS3Credentials = settingKey[Seq[Credentials]]("The S3 credentials to use to upload to S3 with, if empty defaults taken from the environment or IAM will be used")
     lazy val sonicDependenciesUploadFilename = settingKey[String]("Name of the file that will be uploaded to S3, default is value of setting \"{gitCommitHash}.json\"")
     lazy val sonicDependenciesUploadToS3 = taskKey[Unit]("Upload full dependency tree to S3")
+    lazy val sonicDependenciesReverseTree = taskKey[Unit]("Print tree of dependencies for current module")
   }
 
   import autoImport._
@@ -40,6 +42,41 @@ object SonicDependencyTreePlugin extends AutoPlugin {
     sonicDependenciesWithCommit := printTreeWithCommitTask.value,
     sonicDependenciesUploadToS3 := uploadDependenciesTask.value
   )
+
+  override def projectSettings: Seq[Def.Setting[_]] = projectSettingsPrivate
+
+  private lazy val projectSettingsPrivate = Seq(
+    sonicDependenciesReverseTree := reverseDependencyMapTask.value,
+  )
+
+  private def reverseDependencyMapTask = Def.task {
+
+    val projectMap = Keys.loadedBuild.value.allProjectRefs.toMap
+
+    val projectFlatList = projectMap.toList.flatMap {
+      case (ref, project) => project.dependencies.map(dep => ref.project -> dep.project.project)
+    }
+    val reverseDeps = projectFlatList.groupBy(_._2)
+    val flatReverse = reverseDeps.map(x => x._1 -> x._2.map(_._1))
+
+    def findParent(id: String, depth: Int): Unit = {
+      if (depth == 0) println(s"Reverse dependencies tree of ${id}")
+      val maybeParents = flatReverse.get(id)
+      maybeParents.foreach {
+        parents =>
+          parents.foreach { parent =>
+            val project = s"$parent"
+            println(s"${depthLines(depth)}$project")
+            findParent(parent, depth + 1)
+          }
+      }
+    }
+
+    val projectRef = Keys.thisProjectRef.value
+    findParent(projectRef.project, 0)
+  }
+
+  private def depthLines(depth: Int) = Range(0, depth).map(_ => "|..").mkString
 
   private def uploadDependenciesTask = Def.task {
 

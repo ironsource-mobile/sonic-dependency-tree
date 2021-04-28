@@ -16,7 +16,7 @@ It helps to keep track of module dependencies and library version used in each m
 Add the plugin as SBT dependency to your `project/plugins.sbt`
 
 ```
-addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % "0.0.2")
+addSbtPlugin("com.supersonic" % "sonic-dependency-tree" % "0.0.3")
 ```
 
 Since it is an Auto Plugin, no need to explicitly enable it.
@@ -64,6 +64,8 @@ sonicDependenciesUploadFilename in Global := "dependencies.json"
     - Prints dependency list with commit as JSON Array
 - `sonicDependenciesUploadToS3` : `Task` 
     - Upload full dependency tree to S3
+- `sonicDependenciesReverseTree` : `Task`
+    - Print reverse dependencies tree for a project
 
 
 ## S3 configuration
